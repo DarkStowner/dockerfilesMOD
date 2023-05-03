@@ -12,6 +12,7 @@ RUN sed -i -e 's/;daemonize\ =\ yes/daemonize\ =\ no/' /etc/php5/fpm/php-fpm.con
 RUN sed -i 's/^variables_order\ =.*/variables_order\ =\ \"GPCSE\"'/ /etc/php5/cli/php.ini
 
 RUN sed -i -e 's/#$ModLoad\ imudp/$ModLoad\ imudp/' -e 's/#$UDPServerRun\ 514/$UDPServerRun\ 514/' /etc/rsyslog.conf
+RUN sed -i -e 's/#$ModLoad\ imtcp/$ModLoad\ imudp/' -e 's/#$TCPServerRun\ 601/$TCPServerRun\ 601/' /etc/rsyslog.conf
 RUN sed -i -e 's/$ActionFileDefaultTemplate\ RSYSLOG_TraditionalFileFormat/$ActionFileDefaultTemplate\ RSYSLOG_SyslogProtocol23Format/' /etc/rsyslog.conf
 
 RUN mkdir -p /var/log/net/ && touch /var/log/net/syslog.log && ln -s /var/log/net/syslog.log /var/www/
@@ -27,6 +28,6 @@ COPY run.sh /
 
 #RUN cd /var/www && php5 -f ./create-user.php && chown www-data:www-data config.auth.user.php 
 
-EXPOSE 80 514/udp
+EXPOSE 80 514/udp 601/tcp
 
 CMD ["/run.sh"]
